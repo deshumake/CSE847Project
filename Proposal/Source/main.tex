@@ -1,0 +1,112 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{cvpr}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[breaklinks=true,bookmarks=false]{hyperref}
+
+\cvprfinalcopy % *** Uncomment this line for the final submission
+
+\def\cvprPaperID{****} % *** Enter the CVPR Paper ID here
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+% Pages are numbered in submission mode, and unnumbered in camera-ready
+%\ifcvprfinal\pagestyle{empty}\fi
+\setcounter{page}{1}
+\begin{document}
+
+%%%%%%%%% TITLE
+\title{Traffic Anomalies Detection with A Semi-supervised Approach}
+\author{Daniel Shumaker\\
+Michigan State University\\
+{\tt\small shumak37@msu.edu}
+% For a paper whose authors are all at the same institution,
+% omit the following lines up until the closing ``}''.
+% Additional authors and addresses can be added with ``\and'',
+% just like the second author.
+% To save space, use either the email address or home page, not both
+\and
+Luan Nguyen\\
+Michigan State University\\
+{\tt\small nguye590@msu.edu}
+\and
+Pengyu Chu\\
+Michigan State University\\
+{\tt\small chupengy@msu.edu}
+}
+
+\maketitle
+%\thispagestyle{empty}
+
+%%%%%%%%% ABSTRACT
+%\begin{abstract}
+%   The ABSTRACT is to be in fully-justified italicized text, at the top
+%   of the left-hand column, below the author and affiliation
+%   information. Use the word ``Abstract'' as the title, in 12-point
+%   Times, boldface type, centered relative to the column, initially
+%   capitalized. The abstract is to be in 10-point, single-spaced type.
+%   Leave two blank lines after the Abstract, then begin the main text.
+%   Look at previous CVPR abstracts to get a feel for style and length.
+%\end{abstract}
+
+\section{Introduction}
+
+With sensors tracking traffic, signaling systems, and infrastructure, our transportation systems are becoming smarter.
+With computer vision and deep learning, there are many opportunities to solve real-world problems with data gained from multi-cameras.
+Solving these problems can lead to safer cities and can save many lives.
+We propose a solution to one of these problems: detecting traffic anomalies. Examples of these anomalies are lane violations, illegal U-turns, wrong direction driving, crashes, and stalled vehicles.
+These can be extremely dangerous pDTarticularly in traffic highways and intersections. The potential solutions will get the humans in the loop to pay attention to meaningful visual information in situations where timely intervention can save lives.\cite{naphade2017nvidia}
+
+
+Unfortunately, progress has been limited for several reasons like missing data labels, and the lack of high-quality models that convert data to decent forms. In other words, it is hard to get data with labels from the real world. Due to the lack of labels, anomalies cannot be classified with current algorithms. Thus, we plan to seek a semi-supervised approach to address this problem and focus on the research and development of techniques that rely more on transfer learning and semi-supervised learning. 
+
+With some pre-trained model like VGG 16 \cite{ren2015faster}, we can leverage transfer learning to combine these models with our approach and detect the abnormal traffic behaviors from traffic camera video data which is provided by NVIDIA corporation.
+
+
+\section{General Plan}
+
+
+\begin{itemize}[topsep=0pt, itemsep=-5pt]
+   \item  Look through relevant videos from traffic cameras filmed on highways and intersections in the training and test data sets
+   \item Get object detection algorithms related to traffic environment
+   \item Detect static objects in the background and moving vehicles, then compare different status of objects to sense abnormal actions
+   \item Implement the algorithm on the training data, with some popular frameworks like Pytorch or Tensorflow
+   \item Compare our findings to the benchmark algorithm on the test data set. We could also try to improve the accuracy and detection speed
+   \item Write a paper using our findings
+\end{itemize}
+
+First, with the help of \cite{morar2012image}, we will detect static objects by comparing pixel values in an image. The pixels that are similar in color and intensity will become black, the other pixels, the ones on the border of objects, will become white. That will give us contours for the objects in the frame. We will compare these contours with a few more ones generated from other pictures in the given video. The objects that remain will be our stationary objects.
+
+Building off of that, we will detect the lanes of the road. Scrolling through pictures, we will find paint on the road, and we will project a line along that paint to account for one lane. Then, the tasks will be detecting the moving objects. This will have a similar procedure to the previous steps. We will get these objects from the boundaries of what is left on the screen after the static objects have been discovered.
+Now there has been several state-of-the-art solutions like YOLOv3\cite{redmon2018yolov3} which address the objects detection problems regardless of their state. Benefiting by one-stage detection, these solutions can be real-time with a fair accuracy.
+
+By means of \cite{mahadevan2010anomaly}, we will get the status of each of the classified moving objects. This includes the car's origin: the central part of the object, the car's speed: the distance the origin travels in a frame, the car's direction: direction the origin moves in a frame, and the surrounding space: distance between two origins in the same frame.
+
+In the last step, we will implement our learning algorithms to detect anomalies, compare our findings with a benchmark, and we will discuss our findings in a report.
+
+\section{Timeline}
+\begin{itemize}[itemsep=-5pt]
+    \item  Week of Feb 18: literature review
+    \item  Week of Feb 25: data preprocessing
+    \item  Week of Mar 4: develop baseline
+    \item  Week of Mar 18: finish developing version 1
+    \item  Week of Mar 25: improve the model, make version 2.0
+    \item  Week of Apr 8: begin to write report
+\end{itemize}
+
+{\small
+\bibliographystyle{ieee}
+\bibliography{egbib}
+}
+
+\end{document}
