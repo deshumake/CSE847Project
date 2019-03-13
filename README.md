@@ -2,7 +2,7 @@
 
 ### Traffic Anomalies Detection
 
-> @author: Luan Nguyen, Pengyu Chu,m Daniel Shumaker
+> @author: Luan Nguyen, Pengyu Chu, Daniel Shumaker
 
 This repo is for the project in the class CSE 847 Machine Learning.
 
