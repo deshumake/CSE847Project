@@ -79,8 +79,6 @@ def process_video(input_img):
     r = results[0]
     final_img = visualize_car_detection.display_instances2(img, r['rois'], r['masks'], r['class_ids'],
                                                            class_names, r['scores'])
-    inp_shape = image.img_to_array(input_img).shape
-    final_img = cv2.resize(final_img, (inp_shape[1], inp_shape[0]))
     results_sequence += convert2output(header, r['rois'])
     return final_img
 
@@ -89,7 +87,6 @@ model = configure()
 
 output = 'output.mp4'
 clip1 = VideoFileClip("aic19-track3-train-data/2.mp4")
-
 # this function can reduce frames in the video
 # in the demo, we just use 5s duration of the video and two fold faster
 newclip = clip1.fl_time(lambda t: 2*t).set_duration(5)
