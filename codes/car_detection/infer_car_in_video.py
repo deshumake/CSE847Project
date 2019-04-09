@@ -73,25 +73,29 @@ def process_video(input_img):
     global header
     global model
     header += 1
-    img = cv2.resize(input_img, (1024, 1024))
-    img = image.img_to_array(img)
-    results = model.detect([img], verbose=0)
+    # img = cv2.resize(input_img, (1024, 1024))
+    # img = image.img_to_array(img)
+    results = model.detect([input_img], verbose=0)
     r = results[0]
-    final_img = visualize_car_detection.display_instances2(img, r['rois'], r['masks'], r['class_ids'],
+    final_img = visualize_car_detection.display_instances2(input_img, r['rois'], r['masks'], r['class_ids'],
                                                            class_names, r['scores'])
+
+    plt.imshow(final_img)
+    plt.show()
     results_sequence += convert2output(header, r['rois'])
     return final_img
 
 
-model = configure()
+if __name__ == '__main__':
+    model = configure()
 
-output = 'output.mp4'
-clip1 = VideoFileClip("aic19-track3-train-data/2.mp4")
-# this function can reduce frames in the video
-# in the demo, we just use 5s duration of the video and two fold faster
-newclip = clip1.fl_time(lambda t: 2*t).set_duration(5)
-clip = newclip.fl_image(lambda image: process_video(image))
-clip.write_videofile(output, audio=False)
+    output = 'output.mp4'
+    clip1 = VideoFileClip("aic19-track3-train-data/2.mp4")
+    # this function can reduce frames in the video
+    # in the demo, we just use 5s duration of the video and two fold faster
+    newclip = clip1.fl_time(lambda t: 2*t).set_duration(0.1)
+    clip = newclip.fl_image(lambda image: process_video(image))
+    clip.write_videofile(output, audio=False)
 
-# output the box positions (SORT: tracks these boxes)
-print(results_sequence)
+    # output the box positions (SORT: tracks these boxes)
+    print(results_sequence)

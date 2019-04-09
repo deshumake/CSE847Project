@@ -179,7 +179,7 @@ def display_instances2(image, boxes, masks, class_ids, class_names,
 
     masked_image = image.astype(np.uint32).copy()
     for i in range(N):
-        if class_ids[i] == 3 or class_ids[i] == 8:
+        if class_ids[i] >= 0:
             color = colors[i]
 
             # Bounding box
