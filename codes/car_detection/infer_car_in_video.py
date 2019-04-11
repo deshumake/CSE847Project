@@ -93,7 +93,7 @@ if __name__ == '__main__':
     clip1 = VideoFileClip("aic19-track3-train-data/2.mp4")
     # this function can reduce frames in the video
     # in the demo, we just use 5s duration of the video and two fold faster
-    newclip = clip1.fl_time(lambda t: 2*t).set_duration(0.1)
+    newclip = clip1.fl_time(lambda t: 2*t).set_duration(5)
     clip = newclip.fl_image(lambda image: process_video(image))
     clip.write_videofile(output, audio=False)
 
