@@ -104,7 +104,7 @@ if __name__ == '__main__':
         duration = params.integer
     else:
         duration = .5
-    clip1 = VideoFileClip("aic19-track3-train-data/2.mp4")
+    clip1 = VideoFileClip("aic19-track3-train-data/72.mp4")
     # this function can reduce frames in the video
     # in the demo, we just use 5s duration of the video and two fold faster
     newclip = clip1.fl_time(lambda t: 2*t).set_duration(duration)
