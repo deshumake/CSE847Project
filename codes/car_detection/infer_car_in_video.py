@@ -2,6 +2,7 @@ import os
 import sys
 import skimage.io
 import matplotlib.pyplot as plt
+import argparse
 
 sys.path.append("Mask_RCNN")
 sys.path.append("Mask_RCNN/mrcnn")
@@ -85,17 +86,34 @@ def process_video(input_img):
     results_sequence += convert2output(header, r['rois'])
     return final_img
 
+def parseArgs():
+    """Parse input arguments."""
+    parser = argparse.ArgumentParser(description='')
+    parser.add_argument('integer', type=int)
+    args = parser.parse_args()
+    return args
+
 
 if __name__ == '__main__':
     model = configure()
 
     output = 'output.mp4'
+    # get the duration of output video
+    params = parseArgs()
+    if params:
+        duration = params.integer
+    else:
+        duration = .5
     clip1 = VideoFileClip("aic19-track3-train-data/2.mp4")
     # this function can reduce frames in the video
     # in the demo, we just use 5s duration of the video and two fold faster
-    newclip = clip1.fl_time(lambda t: 2*t).set_duration(0.1)
+    newclip = clip1.fl_time(lambda t: 2*t).set_duration(duration)
     clip = newclip.fl_image(lambda image: process_video(image))
     clip.write_videofile(output, audio=False)
 
     # output the box positions (SORT: tracks these boxes)
-    print(results_sequence)
+    #print(results_sequence)
+    with open("carBoxesOutput.txt", "w") as fp:
+        fp.write(results_sequence)
+
+
