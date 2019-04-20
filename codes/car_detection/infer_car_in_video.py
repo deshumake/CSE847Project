@@ -88,14 +88,20 @@ def process_video(input_img):
 
 if __name__ == '__main__':
     model = configure()
+    video_folder = 'aic19-track3-train-data'
+    output_folder = 'output_train'
+    zoom = 3    # speed up to 3 times
+    for file in os.listdir(video_folder):
+        if os.path.splitext(file)[-1] == '.mp4':
+            video = VideoFileClip(os.path.join(video_folder, file))
 
-    output = 'output.mp4'
-    clip1 = VideoFileClip("aic19-track3-train-data/2.mp4")
-    # this function can reduce frames in the video
-    # in the demo, we just use 5s duration of the video and two fold faster
-    newclip = clip1.fl_time(lambda t: 2*t).set_duration(5)
-    clip = newclip.fl_image(lambda image: process_video(image))
-    clip.write_videofile(output, audio=False)
+            video = VideoFileClip('aic19-track3-train-data/2.mp4')
+            # This function can reduce frames in the video
+            # We shrink each video's length to 1/3 with speeding up
+            clip = video.fl_time(lambda t: zoom*t).set_duration(video.duration/zoom - 1)
+            new_video = clip.fl_image(lambda img: process_video(img))
+            new_video.write_videofile(os.path.join(output_folder, file), audio=False)
+            # output the box positions (SORT: tracks these boxes)
+            with open(os.path.basename(file)+'.txt', 'w') as seq_file:
+                seq_file.write(results_sequence)
 
-    # output the box positions (SORT: tracks these boxes)
-    print(results_sequence)
