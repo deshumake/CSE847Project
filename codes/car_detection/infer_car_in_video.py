@@ -2,6 +2,7 @@ import os
 import sys
 import skimage.io
 import matplotlib.pyplot as plt
+import argparse
 
 sys.path.append("Mask_RCNN")
 sys.path.append("Mask_RCNN/mrcnn")
@@ -85,6 +86,13 @@ def process_video(input_img):
     results_sequence += convert2output(header, r['rois'])
     return final_img
 
+def parseArgs():
+    """Parse input arguments."""
+    parser = argparse.ArgumentParser(description='')
+    parser.add_argument('integer', type=int)
+    args = parser.parse_args()
+    return args
+
 
 if __name__ == '__main__':
     model = configure()
@@ -104,4 +112,5 @@ if __name__ == '__main__':
             # output the box positions (SORT: tracks these boxes)
             with open(os.path.basename(file)+'.txt', 'w') as seq_file:
                 seq_file.write(results_sequence)
+
 
