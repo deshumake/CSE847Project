@@ -159,11 +159,11 @@ if __name__ == '__main__':
     output_folder = 'output_train'
     zoom = 10   # speed up to 10 times
 
-    # anomaly_videos = [2,9,11,14,33,35,49,58,63,66,72,73,74,83,91,93,95,97]
-    anomaly_videos = [14,66]
-
+    anomaly_videos = [2,9,11,14,33,35,49,58,63,66,72,73,74,83,91,93,95,97]
     for file in os.listdir(video_folder):
         filename = os.path.splitext(file)
+        results_sequence = ''
+        header = 0
         if filename[-1] == '.mp4' and int(filename[0]) in anomaly_videos:
             video = VideoFileClip(video_folder+ file)
             # This function can reduce frames in the video
@@ -174,4 +174,3 @@ if __name__ == '__main__':
             # output the box positions (SORT: tracks these boxes)
             with open(os.path.join(output_folder, os.path.basename(file)+'.txt'), 'w') as seq_file:
                 seq_file.write(results_sequence)
-
