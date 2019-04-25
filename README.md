@@ -23,6 +23,9 @@ Proposal/
 
 ### Prerequisite 
 
+The files you maybe need is on the Drive https://drive.google.com/drive/folders/1Eee7fgz57J7I4uVtdskzEfGFLv_vkppp?usp=sharing
+
+
 #### install Mask RCNN
 
 ```shell
@@ -91,5 +94,6 @@ python3 sort_track.py
 python3 anomalies_detection.py
 # the output will be under the output_anomalies folder.
 ```
+
 
 
