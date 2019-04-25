@@ -9,7 +9,6 @@ MOTION_THRESHOLD = 2.2
 CLOSE_POSTION = 180
 SPEED_RATIO = 0.5
 POSITION_RATIO = 0.7
-
 RECORD_THRESHOLD = 80
 
 
@@ -128,7 +127,9 @@ def detect_anomaly(car_seqs, total_frames_num):
 
 
 if __name__ == '__main__':
-    video_folder = 'output_test'
+    video_folder = 'output_train'
+    if not os.path.exists(video_folder):
+        os.makedirs(video_folder)
 
     files = [int(file.split('.')[0]) for file in os.listdir(video_folder) if file.endswith('txt')]
     files.sort()
@@ -137,7 +138,6 @@ if __name__ == '__main__':
     anomaly_str = ''
     for file in files:
         file = str(file) + '.mp4.txt'
-        # file = '2.mp4.txt'
         video = VideoFileClip(video_folder +'/'+file[:-4])
         print('process ' + file)
         total_frames_num, car_seqs = process(os.path.join(video_folder, file))

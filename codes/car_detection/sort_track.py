@@ -153,8 +153,11 @@ def process_video(input_img):
 
 if __name__ == '__main__':
     model = configure()
-    video_folder = 'aic19-track3-test-data/'
-    output_folder = 'output_test'
+    video_folder = 'aic19-track3-train-data/'
+    output_folder = 'output_train'
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
     zoom = 10   # speed up to 10 times
 
     # anomaly_videos = [2,9,11,14,33,35,49,58,63,66,72,73,74,83,91,93,95,97]

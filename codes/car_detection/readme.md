@@ -2,6 +2,7 @@
 
 ### Prerequisite 
 
+
 #### install Mask RCNN
 
 ```shell
@@ -13,19 +14,16 @@ python3 setup.py install
 
 #### add the lost files
 
-1. Add videos to aic19-track3-train-data/
+__The all required files are stored on the Google Drive__
 
-2. Add our model mask_rcnn_car_0030.h5 to model/
+1. Add videos to aic19-track3-train-data/ or aic19-track3-train-data/
+
+2. Add our model mask_rcnn_car_0030.h5 to model/; or train that from scratch.
 
 3. ```
-   git clone '19spr_ngu....git'
-   
-   cd 19spr_nguyen_chu_shumaker/codes/car_detection/Mask_RCNN
-   pip3 install -r requirements.txt
-   python3 setup.py install
+   git clone [Our Project]
+   cd codes/car_detection/
    ```
-
-   
 
 ### Train the custom model
 
@@ -53,7 +51,7 @@ python3 Mask_RCNN/car_detection_train.py train --dataset=dataset/ --weights=mode
 # python3 Mask_RCNN/car_detection_train.py train --dataset=dataset/ --weights=model/mask_rcnn_coco.h5 --logs=model/
 ```
 
-### Detect cars in the video
+### Detect cars in the video (it has been integrated to tracking part)
 
 ```shell
 python3 infer_car_in_video.py
@@ -64,6 +62,7 @@ python3 infer_car_in_video.py
 ```shell
 python3 sort_track.py
 # output results into output_train/ or output_test/ in terms of your setup
+# we uploaded the results to Google Drive so you use it directly.
 ```
 
 ### Find anomalies
@@ -71,5 +70,9 @@ python3 sort_track.py
 ```shell
 # make sure there is at least one sequence file under the output_train/
 python3 anomalies_detection.py
+# the output will be under the output_anomalies folder.
 ```
+
+The files you maybe need is on the Drive https://drive.google.com/drive/folders/1Eee7fgz57J7I4uVtdskzEfGFLv_vkppp?usp=sharing
+
 
