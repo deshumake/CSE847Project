@@ -4,10 +4,11 @@ from moviepy.editor import VideoFileClip
 
 
 anomaly_candidates = []
-SPEED_THRESHOLD = 0.005
+SPEED_THRESHOLD = 0.008
 MOTION_THRESHOLD = 2.2
 CLOSE_POSTION = 180
-STOPPING_RATIO = 0.7
+SPEED_RATIO = 0.5
+POSITION_RATIO = 0.7
 
 RECORD_THRESHOLD = 80
 
@@ -86,22 +87,23 @@ def detect_anomaly(car_seqs, total_frames_num):
         car = car_seqs[key]
         recorder_num = car.shape[0]
 
+        # if key == 221039:
+        #     for i in car:
+        #         print(i)
+
         x_moving = car[1:-1, 1] - car[0:-2, 1]
         x_stopping = x_moving[np.abs(x_moving) < MOTION_THRESHOLD]
         motion_ratio = x_stopping.shape[0]/float(recorder_num)
         stalling_car = car[car[:, 3] == 0]
         speed_ratio = stalling_car.shape[0]/float(recorder_num)
-        k = STOPPING_RATIO
         if (car[-1, 0] - car[0, 0]) / float(total_frames_num) > 0.9:
-            print(key)
-            print(car[-1, 0] - car[0, 0])
             continue
 
         x_center = np.mean(car[:, 1])
-
         pre_points = car[1:4, :] if recorder_num > 4 else car
-        if motion_ratio > k and speed_ratio > k and car.shape[0] > RECORD_THRESHOLD \
+        if motion_ratio > POSITION_RATIO and speed_ratio > SPEED_RATIO and car.shape[0] > RECORD_THRESHOLD \
                 and np.abs(x_center - 400) < 300:
+            print(key)
             anomalies[key] = car
         # a[np.where((a[:, 0] == 0) * (a[:, 1] == 1))]
         # if key == 4374:
@@ -112,7 +114,7 @@ def detect_anomaly(car_seqs, total_frames_num):
     anomalies = merge_anomalies(anomalies)
 
     final_results = {}
-    print(len(anomalies.keys()))
+    print('anomalies: ', len(anomalies.keys()))
     for key in anomalies.keys():
         anomaly = anomalies[key]
         zero_case = anomaly[anomaly[:, 3] == 0][0, 0]
@@ -126,15 +128,16 @@ def detect_anomaly(car_seqs, total_frames_num):
 
 
 if __name__ == '__main__':
-    video_folder = 'output_train'
+    video_folder = 'output_test'
 
-    files = [file for file in os.listdir(video_folder) if file.endswith('txt')]
+    files = [int(file.split('.')[0]) for file in os.listdir(video_folder) if file.endswith('txt')]
     files.sort()
     anomaly_candidates = []
     anomaly_candidates_str = ''
     anomaly_str = ''
     for file in files:
-        # file = '95.mp4.txt'
+        file = str(file) + '.mp4.txt'
+        # file = '2.mp4.txt'
         video = VideoFileClip(video_folder +'/'+file[:-4])
         print('process ' + file)
         total_frames_num, car_seqs = process(os.path.join(video_folder, file))
@@ -147,8 +150,8 @@ if __name__ == '__main__':
             anomaly_str += str(file.split('.')[0]) + ' ' + str(r[key] * video.duration*10) + '\n'
         # break
 
-    with open('anomlies_output.txt', 'w') as fi:
+    with open('output_anomalies/anomalies_' + video_folder + '.txt', 'w') as fi:
         fi.write(anomaly_str)
 
-    with open('anomlies_output_with_track_id.txt', 'w') as fi:
+    with open('output_anomalies/anomalies_' + video_folder + '_with_trackid.txt', 'w') as fi:
         fi.write(anomaly_candidates_str)

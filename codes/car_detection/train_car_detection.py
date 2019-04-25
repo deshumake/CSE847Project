@@ -1,7 +1,6 @@
 import os
 import sys
 import skimage.io
-import matplotlib.pyplot as plt
 
 sys.path.append("Mask_RCNN")
 sys.path.append("Mask_RCNN/mrcnn")

@@ -4,8 +4,8 @@ import skimage.io
 import matplotlib.pyplot as plt
 import argparse
 
-sys.path.append("Mask_RCNN")
-sys.path.append("Mask_RCNN/mrcnn")
+sys.path.append("cnn")
+sys.path.append("cnn/mrcnn")
 
 from Mask_RCNN import car_detection_train
 import model as modellib
